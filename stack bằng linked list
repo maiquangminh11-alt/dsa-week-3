@@ -1,0 +1,66 @@
+#include <iostream>
+#include <stdexcept>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+
+    Node(int x, Node* p = nullptr) {
+        data = x;
+        next = p;
+    }
+};
+
+struct Stack {
+    Node* topNode;
+    Stack() {
+        topNode = nullptr;
+    }
+
+
+    bool isEmpty() {
+        return topNode == nullptr;
+    }
+
+
+    void push(int x) {
+        Node* p = new Node(x, topNode);
+        topNode = p;
+    }
+
+
+    int pop() {
+        if (isEmpty()) {
+            throw underflow_error("Stack rỗng!");
+        }
+
+        Node* p = topNode;
+        int value = p->data;
+
+        topNode = topNode->next;
+        delete p;
+
+        return value;
+    }
+
+    int size() {
+        int count = 0;
+        Node* p = topNode;
+
+        while (p != nullptr) {
+        count++;
+        p = p->next;
+        }
+
+        return count;
+    }
+    int top() {
+        if (isEmpty()) {
+            throw underflow_error("Stack rong!");
+        }
+
+        return topNode->data;
+    }
+};
+
