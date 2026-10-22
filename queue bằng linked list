@@ -1,0 +1,118 @@
+#include <iostream>
+#include <stdexcept>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+
+    Node(int x) {
+        data = x;
+        next = nullptr;
+    }
+};
+
+struct Queue {
+    Node* frontNode = nullptr;
+    Node* rearNode = nullptr;
+    int count = 0;
+
+    bool isEmpty() {
+        return frontNode == nullptr;
+    }
+
+    void enqueue(int item) {
+        Node* p = new Node(item);
+
+        if (isEmpty()) {
+            frontNode = rearNode = p;
+        } else {
+            rearNode->next = p;
+            rearNode = p;
+        }
+
+        count++;
+    }
+
+    int dequeue() {
+        if (isEmpty()) {
+            throw underflow_error("Queue rong!");
+        }
+
+        Node* p = frontNode;
+        int value = p->data;
+
+        frontNode = frontNode->next;
+
+        delete p;
+        count--;
+
+        if (frontNode == nullptr) {
+            rearNode = nullptr;
+        }
+
+        return value;
+    }
+
+    int front() {
+        if (isEmpty()) {
+            throw underflow_error("Queue rong!");
+        }
+
+        return frontNode->data;
+    }
+
+    int peek() {
+        return front();
+    }
+
+    int size() {
+        return count;
+    }
+
+    void display() {
+        Node* p = frontNode;
+
+        cout << "FRONT -> ";
+
+        while (p != nullptr) {
+            cout << p->data << " -> ";
+            p = p->next;
+        }
+
+        cout << "NULL\n";
+    }
+
+    ~Queue() {
+        while (frontNode != nullptr) {
+            Node* p = frontNode;
+            frontNode = frontNode->next;
+            delete p;
+        }
+    }
+
+    Queue(const Queue&) = delete;
+    Queue& operator=(const Queue&) = delete;
+};
+
+int main() {
+    Queue q;
+
+    q.enqueue(10);
+    q.enqueue(20);
+    q.enqueue(30);
+
+    q.display();
+
+    cout << "Front: " << q.front() << '\n';
+    cout << "Peek: " << q.peek() << '\n';
+    cout << "Dequeue: " << q.dequeue() << '\n';
+
+    q.display();
+
+    cout << "Size: " << q.size() << '\n';
+    cout << "Queue rong? " << boolalpha
+         << q.isEmpty() << '\n';
+
+    return 0;
+}
