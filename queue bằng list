@@ -1,0 +1,58 @@
+#include <iostream>
+#include <vector>
+#include <stdexcept>
+using namespace std;
+
+struct QueueList {
+    vector<int> data;
+
+    bool isEmpty() {
+        return data.empty();
+    }
+
+    void enqueue(int item) {
+        data.push_back(item);
+    }
+
+    int dequeue() {
+        if (isEmpty()) {
+            throw underflow_error("Queue rong!");
+        }
+
+        int value = data.front();
+        data.erase(data.begin());
+
+        return value;
+    }
+
+    int front() {
+        if (isEmpty()) {
+            throw underflow_error("Queue rong!");
+        }
+
+        return data.front();
+    }
+
+    int peek() {
+        return front();
+    }
+
+    int size() {
+        return static_cast<int>(data.size());
+    }
+};
+
+int main() {
+    QueueList q;
+
+    q.enqueue(10);
+    q.enqueue(20);
+    q.enqueue(30);
+
+    cout << "Front: " << q.front() << '\n';
+    cout << "Dequeue: " << q.dequeue() << '\n';
+    cout << "Front sau dequeue: " << q.front() << '\n';
+    cout << "Size: " << q.size() << '\n';
+
+    return 0;
+}
